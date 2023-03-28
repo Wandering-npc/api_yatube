@@ -3,21 +3,17 @@ from rest_framework.authtoken import views
 from rest_framework.routers import SimpleRouter
 
 
-import .views
-from .views import PostViewSet
+
+
+from .views import PostViewSet, GroupViewSet
 
 
 router = SimpleRouter()
-router.register('api/v1/posts', PostViewSet)
-router.register('api/v1/groups/', GroupViewSet)
-router.register('')
+router.register(r'posts', PostViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'comments', CommentViewSet)
 
 urlpatterns = [    
     path('api/v1/api-token-auth/', views.obtain_auth_token),
-    path('api/v1/posts/', api_posts),
-    path('api/v1/posts/{post_id}/', api_posts_detail),
-    path('api/v1/groups/', api_groups),
-    path('api/v1/groups/{group_id}/', api_groups_detail),
-    path('api/v1/posts/{post_id}/comments/', api_comments),
-    path('api/v1/posts/{post_id}/comments/{comment_id}/', api_comments_detail),
+    path('api/v1/', include(router.urls)),
 ]
