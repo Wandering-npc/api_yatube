@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
@@ -20,11 +19,11 @@ class PostViewSet(viewsets.ModelViewSet):
     
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            raise Response(status=status.HTTP_403_FORBIDDEN)
         super(PostViewSet, self).perform_update(serializer)
     def perform_destroy(self, instance):
         if instance.author != self.request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            raise Response(status=status.HTTP_403_FORBIDDEN)
         super(PostViewSet, self).perform_destroy(instance)
 
 
@@ -40,8 +39,11 @@ class CommentViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     def get_querryset(self):
-        post= get_object_or_404(Post, pk=self.kwargs.get('post_id)'))
+        post = get_object_or_404(Post, pk=self.kwargs.get('post_id)'))
         return post.comments.all()
+    def perform_create(self, serializer):
+        post = get_object_or_404(Post, pk=self.kwargs.get('post_id)'))
+        serializer.save(author=self.request.user, post=post)
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)

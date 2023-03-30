@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework.routers',
-    'api.apps.ApiConfig'
+    'api.apps.ApiConfig',
     
 ]
 
