@@ -3,21 +3,30 @@ from posts.models import Post, Group, Comment
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
-    
+    author = serializers.SlugRelatedField(
+        slug_field='username', 
+        read_only=True,
+    )
+
     class Meta:
-        fields = ('id', 'text', 'author', 'image', 'pub_date')
+        fields = '__all__'
         model = Post
 
 
 class GroupSerializer(serializers.ModelSerializer):
+
     class Meta:
-        fields = ('id', 'title', 'description',)
         model = Group
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    post = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='username',
+    )
+
     class Meta:
-        fields = ('id', 'author', 'post', 'text', 'created')
+        fields = '__all__'
         model = Comment
