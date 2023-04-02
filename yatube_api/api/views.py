@@ -20,7 +20,6 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """Вью для групп."""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
